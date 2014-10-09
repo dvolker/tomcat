@@ -74,7 +74,7 @@
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL HTTP/1.1 Connector on port <%= @port %>
     -->
-    <Connector port="<%= @port %>" protocol="HTTP/1.1"
+    <Connector address="127.0.0.1" port="<%= @port %>" protocol="HTTP/1.1"
                connectionTimeout="20000"
                URIEncoding="UTF-8"
              <% if @proxy_port -%>
@@ -97,30 +97,6 @@
                redirectPort="<%= @ssl_port %>" />
              <% end -%>
     -->
-  <% if @ssl_port -%>
-    <!-- Define a SSL HTTP/1.1 Connector on port <%= @ssl_port %>
-         This connector uses the JSSE configuration, when using APR, the
-         connector should be using the OpenSSL style configuration
-         described in the APR documentation -->
-    <Connector port="<%= @ssl_port %>" protocol="HTTP/1.1" SSLEnabled="true"
-             <% if @ssl_proxy_port -%>
-               proxyPort="<%= @ssl_proxy_port %>"
-             <% end -%>
-               keystoreFile="<%= @config_dir %>/<%= @keystore_file %>"
-               keystorePass="<%= node['tomcat']['keystore_password'] %>"
-               keystoreType="<%= @keystore_type %>"
-               truststorePass="<%= node['tomcat']['keystore_password'] %>"
-               maxThreads="<%= @ssl_max_threads %>" scheme="https" secure="true"
-               clientAuth="false" sslProtocol="TLS" />
-  <% end -%>
-
-  <% if @ajp_port -%>
-    <!-- Define an AJP 1.3 Connector on port <%= @ajp_port %> -->
-    <Connector port="<%= @ajp_port %>"
-               protocol="AJP/1.3"
-               tomcatAuthentication="<%= @tomcat_auth %>"
-               redirectPort="<%= @ssl_port %>" />
-  <% end -%>
 
     <!-- An Engine represents the entry point (within Catalina) that processes
          every request.  The Engine implementation for Tomcat stand alone
